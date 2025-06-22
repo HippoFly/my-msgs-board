@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { apiService } from '../utils/api'
 
 export default {
   name: 'MessageBoard',
@@ -33,10 +33,10 @@ export default {
       if (!this.input.trim()) return;
       
       try {
-        const response = await axios.post('http://localhost:8080/api/messages', {
+        const response = await apiService.addMessage({
           nickname: this.nickname.trim() || undefined,
           content: this.input
-        })
+        });
         this.messages.unshift(response.data)
         this.input = ''
       } catch (error) {
@@ -45,7 +45,7 @@ export default {
     },
     async loadMessages() {
       try {
-        const response = await axios.get('http://localhost:8080/api/messages')
+        const response = await apiService.getMessages();
         this.messages = response.data
       } catch (error) {
         console.error('加载留言失败:', error)
