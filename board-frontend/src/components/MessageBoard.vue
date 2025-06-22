@@ -37,26 +37,120 @@ export default {
           nickname: this.nickname.trim() || undefined,
           content: this.input
         });
-        this.messages.unshift(response.data)
-        this.input = ''
+        this.messages.unshift(response.data);
+        this.input = '';
       } catch (error) {
-        console.error('提交留言失败:', error)
+        console.error('提交留言失败:', error);
       }
     },
     async loadMessages() {
       try {
         const response = await apiService.getMessages();
-        this.messages = response.data
+        this.messages = response.data;
       } catch (error) {
-        console.error('加载留言失败:', error)
+        console.error('加载留言失败:', error);
       }
     }
   },
   mounted() {
     this.loadMessages()
   }
+}</script>
+
+<style scoped>
+.message-board {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem;
+  box-sizing: border-box;
 }
-</script>
+
+.messages {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.messages li {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  border-bottom: 1px solid #eee;
+  flex-wrap: wrap;
+}
+
+.nickname {
+  color: #666;
+  margin-right: 0.5rem;
+  white-space: nowrap;
+}
+
+.content {
+  flex: 1;
+  margin-right: 1rem;
+  word-break: break-word;
+}
+
+.time {
+  color: #999;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.input-area {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.input-area input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.input-area button {
+  padding: 0.5rem 1rem;
+  background-color: #42b983;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  box-sizing: border-box;
+}
+
+.input-area button:hover {
+  background-color: #359469;
+}
+
+@media (max-width: 480px) {
+  .message-board {
+    padding: 0.5rem;
+  }
+  
+  .input-area {
+    flex-direction: column;
+  }
+  
+  .input-area input {
+    width: 100%;
+  }
+  
+  .messages li {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .nickname, .content, .time {
+    width: 100%;
+  }
+}
+</style>
 
 <style scoped>
 .message-board {

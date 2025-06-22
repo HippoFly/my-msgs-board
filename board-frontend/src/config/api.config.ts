@@ -12,7 +12,7 @@ export const API_CONFIG: {
   production: ApiConfig;
 } = {
   development: {
-    baseUrl: 'http://localhost:8085'
+    baseUrl: 'http://192.168.2.141:8085'  // 使用 PC 的 IP 地址
   },
   production: {
     baseUrl: 'https://api.yourdomain.com'

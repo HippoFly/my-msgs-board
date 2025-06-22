@@ -35,6 +35,9 @@ api.interceptors.response.use(
 
 // API 接口定义
 export const apiService = {
+  // 获取当前 API 配置
+  getApiConfig: getApiConfig,
+  
   // 消息相关接口
   async getMessages() {
     return api.get(API_PATHS.messages);
