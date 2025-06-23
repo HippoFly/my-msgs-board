@@ -1,31 +1,50 @@
-.idea/01_board.iml
-.idea/misc.xml
-.idea/modules.xml
-.idea/vcs.xml
-.idea/workspace.xml
-
-# macOS 忽略mac的临时文件
+# macOS
 .DS_Store
-*.DS_Store
-**/.DS_Store
-.DS_Store?
-._*
 .Spotlight-V100
 .Trashes
-ehthumbs.db
+._*
+
+# Windows
 Thumbs.db
-board-backend/.idea/.gitignore
-board-backend/.idea/compiler.xml
-board-backend/.idea/dataSources.xml
-board-backend/.idea/encodings.xml
-board-backend/.idea/jarRepositories.xml
-board-backend/.idea/misc.xml
-board-backend/.idea/vcs.xml
-board-backend/target/classes/application.properties
-board-backend/target/classes/com/example/messageboard/MessageBoardApplication.class
-board-backend/target/classes/com/example/messageboard/config/CorsConfig.class
-board-backend/target/classes/com/example/messageboard/controller/MessageController.class
-board-backend/target/classes/com/example/messageboard/entity/Message.class
-board-backend/target/classes/com/example/messageboard/repository/MessageRepository.class
-board-backend/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
-board-backend/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+ehthumbs.db
+
+# IDEs
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Node
+node_modules/
+
+# Build outputs
+dist/
+dist-ssr/
+coverage/
+
+# Local development
+*.local
+
+# Testing
+cypress/videos/
+cypress/screenshots/
+
+# Java/Maven
+target/
+*.class
+
+# H2 database
+*.mv.db
+*.trace.db
