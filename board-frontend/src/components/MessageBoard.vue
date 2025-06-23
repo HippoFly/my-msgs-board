@@ -1,6 +1,10 @@
 <template>
   <div class="message-board">
-    <h2>留言板</h2>
+    <div class="header">
+      <h2>留言板</h2>
+      <button v-if="!isLoggedIn" @click="showLogin">登录</button>
+      <span v-else>已登录：{{ username }}</span>
+    </div>
     <ul class="messages">
       <li v-for="(msg, idx) in messages" :key="idx">
         <span class="nickname">{{ msg.nickname || '匿名用户' }}</span>
@@ -13,22 +17,36 @@
       <input v-model="input" @keyup.enter="submitMessage" placeholder="请输入留言..." />
       <button @click="submitMessage">提交</button>
     </div>
+    <LoginDialog @login-success="handleLoginSuccess" ref="loginDialog" />
   </div>
 </template>
 
 <script>
 import { apiService } from '../utils/api'
+import LoginDialog from './LoginDialog.vue'
 
 export default {
   name: 'MessageBoard',
+  components: {
+    LoginDialog
+  },
   data() {
     return {
       nickname: '',
       input: '',
-      messages: []
+      messages: [],
+      isLoggedIn: false,
+      username: ''
     }
   },
   methods: {
+    showLogin() {
+      this.$refs.loginDialog.show()
+    },
+    handleLoginSuccess() {
+      this.isLoggedIn = true
+      this.username = localStorage.getItem('username')
+    },
     async submitMessage() {
       if (!this.input.trim()) return;
       
@@ -55,9 +73,30 @@ export default {
   mounted() {
     this.loadMessages()
   }
-}</script>
+}
+</script>
 
 <style scoped>
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+button {
+  padding: 5px 10px;
+  background: #42b983;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #35946a;
+}
+
 .message-board {
   width: 100%;
   max-width: 600px;
