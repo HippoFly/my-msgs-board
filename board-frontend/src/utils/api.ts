@@ -72,5 +72,16 @@ export const apiService = {
   },
   async getAllMessages() {
     return api.get(`${API_PATHS.messages}/all`);
+  },
+  
+  // 用户管理接口
+  async getAllUsers() {
+    return api.get(`${API_PATHS.messages}/users`);
+  },
+  async updateUserStatus(id: number, active: boolean) {
+    return api.put(`${API_PATHS.messages}/users/${id}/status`, { active });
+  },
+  async updateUserRole(id: number, role: string) {
+    return api.put(`${API_PATHS.messages}/users/${id}/role`, { role });
   }
 };

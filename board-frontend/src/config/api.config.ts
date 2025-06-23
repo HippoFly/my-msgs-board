@@ -4,6 +4,7 @@ interface ApiConfig {
 
 interface ApiPaths {
   messages: string;
+  users: string;
 }
 
 // API 配置

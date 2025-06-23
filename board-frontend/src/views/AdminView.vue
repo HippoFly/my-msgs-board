@@ -214,11 +214,50 @@
                 </el-button>
               </div>
             </template>
-            <el-empty description="用户管理功能开发中...">
-              <template #image>
-                <el-icon :size="60"><User /></el-icon>
-              </template>
-            </el-empty>
+
+            <!-- 用户列表 -->
+            <el-table :data="users" style="width: 100%" v-loading="loading">
+              <el-table-column prop="id" label="ID" width="80" />
+              <el-table-column prop="username" label="用户名" width="120" />
+              <el-table-column prop="email" label="邮箱" width="180" />
+              <el-table-column prop="role" label="角色" width="100">
+                <template #default="scope">
+                  <el-tag :type="scope.row.role === 'ADMIN' ? 'danger' : 'info'">
+                    {{ scope.row.role }}
+                  </el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column prop="active" label="状态" width="100">
+                <template #default="scope">
+                  <el-tag :type="scope.row.active ? 'success' : 'danger'">
+                    {{ scope.row.active ? '启用' : '禁用' }}
+                  </el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column prop="createdAt" label="创建时间" width="180">
+                <template #default="scope">
+                  {{ formatTime(scope.row.createdAt) }}
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" width="200" fixed="right">
+                <template #default="scope">
+                  <el-button
+                    :type="scope.row.active ? 'danger' : 'success'"
+                    size="small"
+                    @click="handleUserStatusChange(scope.row)"
+                  >
+                    {{ scope.row.active ? '禁用' : '启用' }}
+                  </el-button>
+                  <el-button
+                    type="primary"
+                    size="small"
+                    @click="handleEditUser(scope.row)"
+                  >
+                    编辑
+                  </el-button>
+                </template>
+              </el-table-column>
+            </el-table>
           </el-card>
         </div>
 
@@ -309,7 +348,8 @@ export default {
         todayMessages: 0,
         pendingMessages: 0,
         totalUsers: 0
-      }
+      },
+      users: []
     }
   },
   methods: {
@@ -318,6 +358,9 @@ export default {
     },
     handleSelect(key) {
       this.activeMenu = key
+      if (key === 'users') {
+        this.loadUsers()
+      }
     },
     handleCommand(command) {
       if (command === 'logout') {
@@ -344,16 +387,16 @@ export default {
       }
     },
     async loadMessages() {
-      this.loading = true
+      this.loading = true;
       try {
-        const response = await apiService.getMessages()
-        this.messages = response.data
-        this.total = response.data.length // 实际项目中应该从后端获取总数
+        const response = await apiService.getAllMessages(); // 使用 getAllMessages 而不是 getMessages
+        this.messages = response.data;
+        this.total = response.data.length; // 实际项目中应该从后端获取总数
       } catch (error) {
-        ElMessage.error('加载留言失败')
-        console.error('加载留言失败:', error)
+        ElMessage.error('加载留言失败');
+        console.error('加载留言失败:', error);
       } finally {
-        this.loading = false
+        this.loading = false;
       }
     },
     async hideMessage(id) {
@@ -425,11 +468,48 @@ export default {
         pendingMessages: Math.floor(Math.random() * 5),
         totalUsers: Math.floor(Math.random() * 100)
       }
+    },
+    async loadUsers() {
+      this.loading = true;
+      try {
+        const response = await apiService.getAllUsers();
+        this.users = response.data;
+      } catch (error) {
+        ElMessage.error('加载用户列表失败');
+        console.error('加载用户列表失败:', error);
+      } finally {
+        this.loading = false;
+      }
+    },
+    async handleUserStatusChange(user) {
+      try {
+        await ElMessageBox.confirm(
+          `确定要${user.active ? '禁用' : '启用'}该用户吗？`,
+          '提示',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }
+        );
+        await apiService.updateUserStatus(user.id, !user.active);
+        ElMessage.success(`${user.active ? '禁用' : '启用'}成功`);
+        await this.loadUsers();
+      } catch (error) {
+        if (error !== 'cancel') {
+          ElMessage.error('操作失败');
+          console.error('操作失败:', error);
+        }
+      }
+    },
+    handleEditUser(user) {
+      ElMessage.info('用户编辑功能开发中...');
     }
   },
   mounted() {
     this.loadMessages()
     this.loadStatistics()
+    this.loadUsers()
   }
 }
 </script>
